@@ -2,6 +2,6 @@
 runtime: php81
 
 # Defaults to "serve index.php" 
-entrypoint: serve src/app/index.php
+entrypoint: serve app/index.php
 
 # If your main page is index.php, comment the above entrypoint setting
