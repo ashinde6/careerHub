@@ -1,4 +1,6 @@
 <?php 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require("connect-db.php");    // include("connect-db.php");
 require("request-db.php");
 ?>
@@ -6,7 +8,7 @@ require("request-db.php");
 
 <?php   // form handling
 
-$list_of_requests = getAllRequests();
+// $list_of_requests = getAllRequests();
 // var_dump($list_of_requests);   // debug
   
 if ($_SERVER['REQUEST_METHOD'] == 'POST')   // GET
@@ -53,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')   // GET
   <title>Maintenance Services</title>
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">  
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">  
-  <link rel="stylesheet" href="maintenance-system.css">  
+  <link rel="stylesheet" href="../styling/maintenance-system.css">  
 </head>
 
 <body>  

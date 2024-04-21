@@ -2,19 +2,18 @@
 // Remember to start the database server (or GCP SQL instance) before trying to connect to it
 ////////////////////////////////////////////
 /** S24, PHP (on Google Standard App Engine) connect to MySQL instance (GCP) **/
-$username = 'abby2';                       // user you set in google (add another collaborator)
-$password = 'abby2gcppassword';     
-$host = 'cs-4750-final-project-417623:us-east4:db-project';       // e.g., 'cs4750:us-east4:db-demo'; 
-$dbname = 'db-project';           // https://console.cloud.google.com/sql/instances/db-project/overview?project=cs-4750-final-project-417623 
-$dsn = "mysql:unix_socket=/cloudsql/cs-4750-final-project-417623:us-east4:db-project";
+// $username = 'abby2';                       // user you set in google (add another collaborator)
+// $password = 'abby2gcppassword';     
+// $host = 'cs-4750-final-project-417623:us-east4:db-project';       // e.g., 'cs4750:us-east4:db-demo'; 
+// $dbname = 'db-project';           // https://console.cloud.google.com/sql/instances/db-project/overview?project=cs-4750-final-project-417623 
+// $dsn = "mysql:unix_socket=/cloudsql/cs-4750-final-project-417623:us-east4:db-project";
       // e.g., "mysql:unix_socket=/cloudsql/cs4750:us-east4:db-demo;dbname=guestbook";
 
-// $username = 'root';                       // or your username
-// $password = 'your-root-password';     
-// $host = 'cs-4750-final-project-417623:us-east4:db-potd';       // e.g., 'cs4750:us-east4:db-demo'; 
-// $dbname = 'CS-4750 Final Project';           // e.g., 'guestbook';
-// $dsn = "mysql:unix_socket=/cloudsql/cs-4750-final-project-417623:us-east4:db-potd;dbname=your-database-name";
-//       e.g., "mysql:unix_socket=/cloudsql/cs4750:us-east4:db-demo;dbname=guestbook";
+$username = 'root';                       // or your username
+$password = 'passw0rd';     
+$host = 'cs-4750-final-project-417623:us-east4:db-project';       // e.g., 'cs4750:us-east4:db-demo'; 
+$dbname = 'db-project';           // e.g., 'guestbook';
+$dsn = "mysql:unix_socket=/cloudsql/cs-4750-final-project-417623:us-east4;db-project=careerhub";
 
 // to get instance connection name, go to GCP SQL overview page
 ////////////////////////////////////////////
@@ -45,8 +44,8 @@ $dsn = "mysql:unix_socket=/cloudsql/cs-4750-final-project-417623:us-east4:db-pro
 ////////////////////////////////////////////
 
 /** S24, PHP (on GCP, local XAMPP, or CS server) connect to MySQL (on CS server) **/
-// $username = 'dgs5qm'; 
-// $password = 'R0wnoAkG@te12!';
+// $username = '**'; 
+// $password = '**';
 // $host = 'portal.cs.virginia.edu';
 // $dbname = 'dgs5qm';
 // $dsn = "mysql:host=$host;dbname=$dbname";
@@ -87,6 +86,7 @@ try
 {
 //  $db = new PDO("mysql:host=$hostname;dbname=db-demo", $username, $password);
    $db = new PDO($dsn, $username, $password);
+   echo "success";
    
    // dispaly a message to let us know that we are connected to the database 
    // echo "<p>You are connected to the database -- host=$host</p>";
