@@ -13,7 +13,7 @@ $username = 'root';                       // or your username
 $password = 'passw0rd';     
 $host = 'cs-4750-final-project-417623:us-east4:db-project';       // e.g., 'cs4750:us-east4:db-demo'; 
 $dbname = 'db-project';           // e.g., 'guestbook';
-$dsn = "mysql:unix_socket=/cloudsql/cs-4750-final-project-417623:us-east4;db-project=careerhub";
+$dsn = "mysql:unix_socket=/cloudsql/cs-4750-final-project-417623:us-east4:db-project;dbname=careerhub";
 
 // to get instance connection name, go to GCP SQL overview page
 ////////////////////////////////////////////
@@ -86,7 +86,6 @@ try
 {
 //  $db = new PDO("mysql:host=$hostname;dbname=db-demo", $username, $password);
    $db = new PDO($dsn, $username, $password);
-   echo "success";
    
    // dispaly a message to let us know that we are connected to the database 
    // echo "<p>You are connected to the database -- host=$host</p>";

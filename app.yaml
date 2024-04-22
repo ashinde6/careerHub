@@ -1,0 +1,10 @@
+# Use the PHP 8.1 runtime
+runtime: php81
+
+# Defaults to "serve index.php" 
+entrypoint: serve src/app/index.php
+
+# If your main page is index.php, comment the above entrypoint setting
+handlers:
+  - url: /static/styling
+    static_dir: src/styling

@@ -1,7 +1,0 @@
-# Use the PHP 8.1 runtime
-runtime: php81
-
-# Defaults to "serve index.php" 
-entrypoint: serve app/index.php
-
-# If your main page is index.php, comment the above entrypoint setting
