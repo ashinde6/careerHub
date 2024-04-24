@@ -1,4 +1,32 @@
-<!DOCTYPE html>
+<?php
+require 'connect-db.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $username = $_POST['name'];
+    $password = $_POST['pwd'];
+
+    // Retrieve user from database
+    $stmt = $db->prepare("SELECT * FROM User WHERE username = ?");
+    $stmt->execute([$username]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user) {
+        // Verify password
+        if (password_verify($password, $user['password'])) {
+            // Password correct, redirect to home.php
+            header("Location: home.php");
+            exit();
+        } else {
+            // Incorrect password
+            $error_message = "Incorrect password or username";
+        }
+    } else {
+        // User not found
+        $error_message = "Incorrect password or username";
+    }
+}
+?>
+
 <html>
 <head>
   <meta charset="utf-8">   
@@ -17,6 +45,9 @@
       <input type="submit" value="Submit" class="btn" /> 
       <a href="signup.php" class="btn">Sign Up</a>
     </form>
+    <?php if (isset($error_message)) : ?>
+      <p><?php echo $error_message; ?></p>
+    <?php endif; ?>
   </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
