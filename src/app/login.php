@@ -1,4 +1,5 @@
 <?php
+session_start();
 require 'connect-db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -13,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($user) {
         // Verify password
         if (password_verify($password, $user['password'])) {
+            $_SESSION["username"] = $username;
             // Password correct, redirect to home.php
             header("Location: home.php");
             exit();
