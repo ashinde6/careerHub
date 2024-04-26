@@ -20,7 +20,7 @@ if (isset($_SESSION["username"])) {
 }
 
 $jobs = [];
-$stmt = $db->prepare("SELECT job_name, work_type FROM job");
+$stmt = $db->prepare("SELECT job_name, work_type FROM Job");
 $stmt->execute();
 $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -55,10 +55,10 @@ $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Expanded:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@100..900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Overlock+SC&family=Quicksand:wght@300..700&family=Wix+Madefor+Text:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
 </head>
 <body>  
-  <div>  
-    <h1 class="text-align: left; font-family: 'Libre Franklin', sans-serif; font-size: 2em; margin: 20px">Welcome, <?php echo htmlspecialchars($name);?>!</h1>
+  <div style="width: 100%">  
+    <h1 class="text-align: left; font-family: 'Libre Franklin', sans-serif; font-size: 1.5em; margin: 20px">Welcome, <?php echo htmlspecialchars($name);?>!</h1>
     <div id="jobseekers" style="display: none">
-        <input type="search">
+        <input type="search" style="margin-top: 30px">
         <table class="table table-hover">
             <thead>
             <tr>
@@ -70,6 +70,21 @@ $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <th scope="col">Employment Type</th>
             </tr>
             </thead>
+            <tbody>
+              <!-- PHP code to create table rows dynamically -->
+              <?php 
+                for ($i = 1; $i < count($jobs); $i++) {
+                    echo "<tr>";
+                    echo "<td>" . htmlspecialchars($jobs[$i]['job_name']) . "</td>";
+                    echo "<td></td>";
+                    echo "<td></td>";
+                    echo "<td></td>";
+                    echo "<td></td>";
+                    echo "<td>" . htmlspecialchars($jobs[$i]['work_type']) . "</td>";
+                    echo "</tr>";
+                }
+              ?>
+            </tbody>
         </table>
     </div>
     <div id="employerFields" style="display: none">
