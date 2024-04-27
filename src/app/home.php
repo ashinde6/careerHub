@@ -6,6 +6,8 @@ require 'connect-db.php';
 $role = "";
 $user = "";
 
+$search_input = isset($_GET['search']) ? $_GET['search'] : '';
+
 if (isset($_SESSION["username"])) {
     $username = $_SESSION["username"];
 
@@ -27,8 +29,16 @@ $stmt = $db->prepare("
     JOIN Location l ON c.location_id = l.location_id
     JOIN Industry i ON j.industry_id = i.industry_id
     JOIN Salary s ON j.salary_id = s.salary_id
+    WHERE 
+        j.job_name LIKE :search OR
+        c.name LIKE :search OR
+        i.industry_name LIKE :search OR
+        l.address_city LIKE :search OR
+        l.address_state LIKE :search
 ");
-$stmt->execute();
+
+$search = '%' . $search_input . '%';
+$stmt->execute(['search' => $search]);
 $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
@@ -40,6 +50,9 @@ $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <meta name="viewport" content="width=device-width, initial-scale=1">  
   <title>CareerHub</title> 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">  
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnwNcsZrvWX6N3ceRF2cT4Hf0pLCrvU7ywIs4yvWHZZLw4FzlmFu9eT" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
   <link rel="stylesheet" href="/static/styling/maintenance-system.css" /> 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -65,10 +78,17 @@ $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <div style="width: 100%">  
     <h1 class="text-align: left; font-family: 'Libre Franklin', sans-serif; font-size: 1.5em; margin: 20px">Welcome, <?php echo htmlspecialchars($name);?>!</h1>
     <div id="jobseekers" style="display: none">
-        <input type="search" style="margin-top: 30px">
+        <form method="GET" style="display: flex; align-items: center;">
+            <input type="search" class="search-input" name="search" placeholder="Search for a job..." value="<?php echo htmlspecialchars($search_input); ?>">
+            <button type="submit" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+              </svg>
+            </button>
+        </form>
         <table class="table table-hover">
             <thead>
-            <tr>
+            <tr style="clickable-row">
                 <th scope="col">Job Title</th>
                 <th scope="col">Company</th>
                 <th scope="col">Industry</th>
