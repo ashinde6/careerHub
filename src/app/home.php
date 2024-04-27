@@ -20,7 +20,14 @@ if (isset($_SESSION["username"])) {
 }
 
 $jobs = [];
-$stmt = $db->prepare("SELECT job_name, work_type FROM Job");
+$stmt = $db->prepare("
+    SELECT j.job_name, j.work_type, c.name, l.address_city, l.address_state, i.industry_name, s.min_salary, s.max_salary
+    FROM Job j
+    JOIN Company c ON j.company_id = c.company_id
+    JOIN Location l ON c.location_id = l.location_id
+    JOIN Industry i ON j.industry_id = i.industry_id
+    JOIN Salary s ON j.salary_id = s.salary_id
+");
 $stmt->execute();
 $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -63,8 +70,8 @@ $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <thead>
             <tr>
                 <th scope="col">Job Title</th>
-                <th scope="col">Category</th>
-                <th scope="col">Workplace</th>
+                <th scope="col">Company</th>
+                <th scope="col">Industry</th>
                 <th scope="col">Location</th>
                 <th scope="col">Department</th>
                 <th scope="col">Employment Type</th>
@@ -76,10 +83,10 @@ $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 for ($i = 1; $i < count($jobs); $i++) {
                     echo "<tr>";
                     echo "<td>" . htmlspecialchars($jobs[$i]['job_name']) . "</td>";
-                    echo "<td></td>";
-                    echo "<td></td>";
-                    echo "<td></td>";
-                    echo "<td></td>";
+                    echo "<td>" . htmlspecialchars($jobs[$i]['name']) . "</td>";
+                    echo "<td>" . htmlspecialchars($jobs[$i]['industry_name']) . "</td>";
+                    echo "<td>" . htmlspecialchars($jobs[$i]['address_city']) . ", " . htmlspecialchars($jobs[$i]['address_state']) . "</td>";
+                    echo "<td>" . htmlspecialchars($jobs[$i]['min_salary']) . "-" . htmlspecialchars($jobs[$i]['max_salary']) . "</td>";
                     echo "<td>" . htmlspecialchars($jobs[$i]['work_type']) . "</td>";
                     echo "</tr>";
                 }
