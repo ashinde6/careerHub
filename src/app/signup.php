@@ -77,33 +77,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
   </script>
 </head>
+
+<header>  
+  <nav class="navbar navbar-expand-md navbar-dark bg-light">
+    <div class="container-fluid">            
+      <a class="navbar-brand" href="#">
+        <span style="color: #000000; font-size: 1.5em; margin: 0;">Career</span>
+        <span style="color: #52B4EE; font-size: 1.5em; margin: 0;">Hub</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar" aria-controls="collapsibleNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  </nav>
+</header>  
+
 <body>  
-  <div>  
-    <h1>CareerHub</h1>
-    <form action="signup.php" method="post">
-      Name: <input type="text" name="name" required /> <br />     
-      Username: <input type="text" name="username" required /> <br/>
-      Password: <input type="password" name="pwd" required /> <br/>
-      Email: <input type="email" name="email" required /> <br />
-      Role: <select id="user_type" name="user_type" onchange="toggleFields()" required>
-                <option value="" disabled selected>-- Select an Option --</option>
-                <option value="job_seeker">Job Seeker</option>
-                <option value="employer">Employer</option>
-            </select> <br />
-      <div id="employer_fields" style="display: none;">
-          Company Name: <input type="text", name="company_name" /><br>
-          Speciality: <input type="text" name="speciality" /><br>
-          Employee Count: <input type="number" name="employee_count" /><br>
-          About The Company: <input type="text", name="description" /><br>
-          Location - <br>
-            City: <input type="text" name="city" /><br>
-            State: <input type="text" name="state" /><br>
-            Zip: <input type="text" name="zip" /><br>
-            Country: <input type="text" name="country" /><br>
-      </div>
-      <input type="submit" value="Submit" class="btn" />
-      <a href="login.php" class="btn">Back</a>
-    </form>
+  <div>
+    <div class="bluebox">  
+      <h3>Welcome to CareerHub!</h3>
+      <form action="signup.php" method="post">
+        Name: <input type="text" name="name" required /> <br />     
+        Username: <input type="text" name="username" required /> <br/>
+        Password: <input type="password" name="pwd" required /> <br/>
+        Email: <input type="email" name="email" required /> <br />
+        Role: <select id="user_type" name="user_type" onchange="toggleFields()" required>
+                  <option value="" disabled selected>-- Select an Option --</option>
+                  <option value="job_seeker">Job Seeker</option>
+                  <option value="employer">Employer</option>
+              </select> <br />
+        <div id="employer_fields" style="display: none;">
+            Company Name: <input type="text", name="company_name" /><br>
+            Speciality: <input type="text" name="speciality" /><br>
+            Employee Count: <input type="number" name="employee_count" /><br>
+            About The Company: <input type="text", name="description" /><br>
+            Location - <br>
+              City: <input type="text" name="city" /><br>
+              State: <input type="text" name="state" /><br>
+              Zip: <input type="text" name="zip" /><br>
+              Country: <input type="text" name="country" /><br>
+        </div>
+        <input type="submit" value="Submit" class="btn" />
+        <a href="login.php" class="btn">Back</a>
+      </form>
+    </div>
   </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
