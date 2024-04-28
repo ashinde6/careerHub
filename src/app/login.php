@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <form action="login.php" method="post">     
         Username: <input type="text" name="name" required /> <br/>
         Password: <input type="password" name="pwd" required /> <br/>
-        <input type="submit" value="Submit" class="btn" /> 
+        <input type="submit" value="Log In" class="btn" /> 
         <a href="signup.php" class="btn">Sign Up</a>
       </form>
       <?php if (isset($error_message)) : ?>
