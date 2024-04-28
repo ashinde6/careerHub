@@ -39,24 +39,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <link rel="stylesheet" href="/static/styling/maintenance-system.css" /> 
 </head>
 
-<body>  
-  <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <!-- <h1>CareerHub</h1> -->
-      <a class="navbar-brand" href="#">CareerHub</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+<header>  
+  <nav class="navbar navbar-expand-md navbar-dark bg-light">
+    <div class="container-fluid">            
+      <a class="navbar-brand" href="#">
+        <span style="color: #000000; font-size: 1.5em; margin: 0;">Career</span>
+        <span style="color: #52B4EE; font-size: 1.5em; margin: 0;">Hub</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar" aria-controls="collapsibleNavbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </div>
+  </nav>
+</header>    
 
+<body>  
   <div>  
     <div class="bluebox">
       <h3>Welcome to CareerHub!</h3>
