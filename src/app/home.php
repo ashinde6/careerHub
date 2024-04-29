@@ -41,6 +41,22 @@ $search = '%' . $search_input . '%';
 $stmt->execute(['search' => $search]);
 $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$employer_jobs = [];
+$stmt2 = $db->prepare("
+    SELECT j.job_name, j.work_type, c.name, l.address_city, l.address_state, i.industry_name, s.min_salary, s.max_salary
+    FROM Job j
+    JOIN Company c ON j.company_id = c.company_id
+    JOIN Location l ON c.location_id = l.location_id
+    JOIN Industry i ON j.industry_id = i.industry_id
+    JOIN Salary s ON j.salary_id = s.salary_id
+    WHERE c.company_id = :company_id");
+
+// Bind the company_id parameter
+$stmt2->bindParam(':company_id', $_SESSION["company_id"], PDO::PARAM_INT);
+
+$stmt2->execute();
+$employer_jobs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <html>
@@ -67,6 +83,9 @@ $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } else {
             employerFields.style.display = 'block';
             jobseekers.style.display = 'none';
+            // redirect to company profile
+            // header("Location: submit_job.php");
+            // exit();
         }
     });
   </script>
@@ -115,7 +134,35 @@ $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </table>
     </div>
     <div id="employerFields" style="display: none">
-        <p>Employer</p>
+        <p Welcome, <?php echo htmlspecialchars($name);?>!</p>
+        <table class="table table-hover">
+            <thead>
+            <tr style="clickable-row">
+                <th scope="col">Job Title</th>
+                <th scope="col">Company</th>
+                <th scope="col">Industry</th>
+                <th scope="col">Workplace</th>
+                <th scope="col">Location</th>
+            </tr>
+            </thead>
+            <tbody>
+              <!-- PHP code to create table rows dynamically -->
+              <?php 
+                for ($i = 1; $i < count($employer_jobs); $i++) {
+                    echo "<tr>";
+                    echo "<td><a href=\"submit_job.php?id=" . urlencode($employer_jobs[$i]['job_id']) . "\">" . htmlspecialchars($employer_jobs[$i]['job_name']) . "</a></td>";
+                    echo "<td>" . htmlspecialchars($employer_jobs[$i]['name']) . "</td>";
+                    echo "<td>" . htmlspecialchars($employer_jobs[$i]['industry_name']) . "</td>";
+                    echo "<td>" . htmlspecialchars($employer_jobs[$i]['work_type']) . "</td>";
+                    echo "<td>" . htmlspecialchars($employer_jobs[$i]['address_city']) . ", " . htmlspecialchars($jobs[$i]['address_state']) . "</td>";
+                    echo "</tr>";
+                }
+              ?>
+            </tbody>
+        </table>
+        <form action="submit_job.php" method="GET">
+            <input type="submit" value="Add Job Listing">
+        </form>
     </div>
   </div>
 
