@@ -195,38 +195,40 @@ $employer_jobs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
               </svg>
             </button>
         </form>
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th scope="col">Job Title</th>
-                <th scope="col">Company</th>
-                <th scope="col">Industry</th>
-                <th scope="col">Location</th>
-                <th scope="col">Salary</th>
-                <th scope="col">Employment Type</th>
-            </tr>
-            </thead>
-            <tbody>
-              <?php 
-                for ($i = 1; $i < count($jobs); $i++) {
-                    echo "<tr class='clickable-row'>";
-                    echo "<td>" . htmlspecialchars($jobs[$i]['job_name']) . "</td>";
-                    echo "<td>" . htmlspecialchars($jobs[$i]['name']) . "</td>";
-                    echo "<td>" . htmlspecialchars($jobs[$i]['industry_name']) . "</td>";
-                    echo "<td>" . htmlspecialchars($jobs[$i]['address_city']) . ", " . htmlspecialchars($jobs[$i]['address_state']) . "</td>";
-                    $min_salary = $jobs[$i]['min_salary'];
-                    $max_salary = $jobs[$i]['max_salary'];
-                    if ($min_salary > 0 && $max_salary > 0) {
-                        echo "<td>" . htmlspecialchars($min_salary) . " - " . htmlspecialchars($max_salary) . "</td>";
-                    } else {
-                        echo "<td>N/A</td>"; // Default message
-                    }
-                    echo "<td>" . htmlspecialchars($jobs[$i]['work_type']) . "</td>";
-                    echo "</tr>";
-                }
-              ?>
-            </tbody>
-        </table>
+        <div style="height: 700px; width: fit-content; overflow-y: auto;">
+          <table class="table table-hover">
+              <thead>
+              <tr>
+                  <th scope="col">Job Title</th>
+                  <th scope="col">Company</th>
+                  <th scope="col">Industry</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">Salary</th>
+                  <th scope="col">Employment Type</th>
+              </tr>
+              </thead>
+              <tbody>
+                <?php 
+                  for ($i = 1; $i < count($jobs); $i++) {
+                      echo "<tr class='clickable-row'>";
+                      echo "<td>" . htmlspecialchars($jobs[$i]['job_name']) . "</td>";
+                      echo "<td>" . htmlspecialchars($jobs[$i]['name']) . "</td>";
+                      echo "<td>" . htmlspecialchars($jobs[$i]['industry_name']) . "</td>";
+                      echo "<td>" . htmlspecialchars($jobs[$i]['address_city']) . ", " . htmlspecialchars($jobs[$i]['address_state']) . "</td>";
+                      $min_salary = $jobs[$i]['min_salary'];
+                      $max_salary = $jobs[$i]['max_salary'];
+                      if ($min_salary > 0 && $max_salary > 0) {
+                          echo "<td>" . htmlspecialchars($min_salary) . " - " . htmlspecialchars($max_salary) . "</td>";
+                      } else {
+                          echo "<td>N/A</td>"; // Default message
+                      }
+                      echo "<td>" . htmlspecialchars($jobs[$i]['work_type']) . "</td>";
+                      echo "</tr>";
+                  }
+                ?>
+              </tbody>
+          </table>
+        </div>
         <div class="modal fade bd-example-modal-lg" id="jobModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
