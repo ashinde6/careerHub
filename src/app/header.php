@@ -12,5 +12,10 @@ session_start();
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar" aria-controls="collapsibleNavbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+      <?php if (isset($_SESSION["username"])) : ?>
+        <form action="logout.php" method="post">
+          <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
+      <?php endif; ?>
   </nav>
 </header>    
