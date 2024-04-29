@@ -52,7 +52,7 @@ $jobs_json = json_encode($jobs);
 
 $employer_jobs = [];
 $stmt2 = $db->prepare("
-    SELECT j.job_name, j.work_type, c.name, l.address_city, l.address_state, i.industry_name, s.min_salary, s.max_salary
+    SELECT j.job_id, j.job_name, j.work_type, c.name, l.address_city, l.address_state, i.industry_name, s.min_salary, s.max_salary
     FROM Job j
     JOIN Company c ON j.company_id = c.company_id
     JOIN Location l ON c.location_id = l.location_id
@@ -262,7 +262,7 @@ $employer_jobs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
               <?php 
                 for ($i = 0; $i < count($employer_jobs); $i++) {
                     echo "<tr>";
-                    echo "<td><a href=\"edit_job.php?id=" . urlencode($employer_jobs[$i]['job_id']) . "\">" . htmlspecialchars($employer_jobs[$i]['job_name']) . "</a></td>";
+                    echo "<td><a href=\"edit_job.php?id=" . $employer_jobs[$i]['job_id'] . "\">" . htmlspecialchars($employer_jobs[$i]['job_name']) . "</a></td>";
                     echo "<td>" . htmlspecialchars($employer_jobs[$i]['name']) . "</td>";
                     echo "<td>" . htmlspecialchars($employer_jobs[$i]['industry_name']) . "</td>";
                     echo "<td>" . htmlspecialchars($employer_jobs[$i]['work_type']) . "</td>";
