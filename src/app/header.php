@@ -16,6 +16,9 @@ session_start();
         <form action="logout.php" method="post">
           <button type="submit" class="btn btn-danger">Logout</button>
         </form>
+        <form action="delete.php" method="post">
+          <button type="submit" class="btn btn-danger">Delete User</button>
+        </form>
       <?php endif; ?>
   </nav>
 </header>    
