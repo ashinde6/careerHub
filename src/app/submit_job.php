@@ -1,4 +1,8 @@
 <?php
+include('header.php');
+
+require 'connect-db.php';
+
 $job_id = $_GET['id'];
 
 // Fetch job information from the database using $job_id
