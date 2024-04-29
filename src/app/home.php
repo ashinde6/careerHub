@@ -81,7 +81,6 @@ $employer_jobs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
   <script>
     document.addEventListener('DOMContentLoaded', function() {
         const jobs = <?php echo $jobs_json; ?>;  
-        console.log(jobs);
         var role = '<?php echo $role; ?>';
 
         var jobseekers = document.getElementById('jobseekers');
@@ -131,8 +130,6 @@ $employer_jobs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
             // const modalBenefits = document.getElementById("benefits-body");
             // modalBenefits.innerHTML = benefits;
 
-            console.log(row);
-
             // Show the modal using Bootstrap's modal method
             const modal = new bootstrap.Modal(document.getElementById("jobModal"));
             modal.show();  // Open the modal
@@ -152,7 +149,6 @@ $employer_jobs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
         function getBenefits(jobs, job_title, company_name, industry_name, work_type) {
           const job = findJob(jobs, job_title, company_name, industry_name, work_type);
-          console.log(jobs[job]);
           // const benefit = jobs[job]["type"];
           // return benefit;
         }
@@ -171,7 +167,6 @@ $employer_jobs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
         function getSkills(jobs, job_title, company_name, industry_name, work_type) {
           const job = findJob(jobs, job_title, company_name, industry_name, work_type);
-          console.log(job);
           const skill = jobs[job]["skill_name"];
           return skill;
         }

@@ -15,6 +15,10 @@ $host = 'cs-4750-final-project-417623:us-east4:db-project';       // e.g., 'cs47
 $dbname = 'db-project';           // e.g., 'guestbook';
 $dsn = "mysql:unix_socket=/cloudsql/cs-4750-final-project-417623:us-east4:db-project;dbname=careerhub";
 
+
+$username_readOnly = 'readonly_user';
+$password_readOnly = 'R3@donLyus3r12!';
+
 // to get instance connection name, go to GCP SQL overview page
 ////////////////////////////////////////////
 
@@ -85,7 +89,7 @@ $dsn = "mysql:unix_socket=/cloudsql/cs-4750-final-project-417623:us-east4:db-pro
 try 
 {
 //  $db = new PDO("mysql:host=$hostname;dbname=db-demo", $username, $password);
-   $db = new PDO($dsn, $username, $password);
+   $db = new PDO($dsn, $username_readOnly, $password_readOnly);
    
    // dispaly a message to let us know that we are connected to the database 
    // echo "<p>You are connected to the database -- host=$host</p>";
@@ -101,6 +105,22 @@ catch (Exception $e)       // handle any type of exception
 {
    $error_message = $e->getMessage();
    echo "<p>Error message: $error_message </p>";
+}
+
+if (isset($_SESSION['username'])) {
+   $stmt = $db->prepare("SELECT role FROM User WHERE username = ?");
+   $stmt->execute([$_SESSION['username']]);
+   $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+   if ($user['role'] == 'employer') {
+       // Change connection to full access for employers
+       
+       try {
+           $db = new PDO($dsn, $username, $password);
+       } catch (PDOException $e) {
+           echo "<p>Error reconnecting to the database with full access: " . $e->getMessage() . "</p>";
+       }
+   }
 }
 
 ?>
