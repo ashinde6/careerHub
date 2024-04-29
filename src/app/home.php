@@ -50,21 +50,13 @@ $stmt2 = $db->prepare("
     JOIN Location l ON c.location_id = l.location_id
     JOIN Industry i ON j.industry_id = i.industry_id
     JOIN Salary s ON j.salary_id = s.salary_id
-    WHERE c.company_id = :company_id");
+    WHERE c.company_id = :cur_company_id");
 
-$stmt2->bindParam(':company_id', $_SESSION["company_id"], PDO::PARAM_INT);
+$stmt2->bindParam(':cur_company_id', $user["company_id"]);
 
 $stmt2->execute();
 $employer_jobs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
-if (isset($_GET['logout'])) {
-  // Destroy the session
-  session_destroy();
-  
-  // Redirect to login page
-  header("Location: login.php");
-  exit();
-}
 ?>
 
 <html>
@@ -94,6 +86,7 @@ if (isset($_GET['logout'])) {
         }
     });
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Expanded:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@100..900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Overlock+SC&family=Quicksand:wght@300..700&family=Wix+Madefor+Text:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
@@ -143,21 +136,18 @@ if (isset($_GET['logout'])) {
             <thead>
             <tr style="clickable-row">
                 <th scope="col">Job Title</th>
-                <th scope="col">Company</th>
                 <th scope="col">Industry</th>
                 <th scope="col">Workplace</th>
-                <th scope="col">Location</th>
             </tr>
             </thead>
             <tbody>
               <?php 
-                for ($i = 1; $i < count($employer_jobs); $i++) {
+                for ($i = 0; $i < count($employer_jobs); $i++) {
                     echo "<tr>";
-                    echo "<td><a href=\"submit_job.php?id=" . urlencode($jobs[$i]['job_id']) . "\">" . htmlspecialchars($jobs[$i]['job_name']) . "</a></td>";
+                    echo "<td><a href=\"edit_job.php?id=" . urlencode($employer_jobs[$i]['job_id']) . "\">" . htmlspecialchars($employer_jobs[$i]['job_name']) . "</a></td>";
                     echo "<td>" . htmlspecialchars($employer_jobs[$i]['name']) . "</td>";
                     echo "<td>" . htmlspecialchars($employer_jobs[$i]['industry_name']) . "</td>";
                     echo "<td>" . htmlspecialchars($employer_jobs[$i]['work_type']) . "</td>";
-                    echo "<td>" . htmlspecialchars($employer_jobs[$i]['address_city']) . ", " . htmlspecialchars($jobs[$i]['address_state']) . "</td>";
                     echo "</tr>";
                 }
               ?>
@@ -167,9 +157,6 @@ if (isset($_GET['logout'])) {
             <input type="submit" value="Add Job Listing">
         </form>
     </div>
-    <a href="javascript:void(0);" onclick="logout()">Logout</a>
   </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     
 </body>

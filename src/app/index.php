@@ -17,6 +17,12 @@ switch (@parse_url($_SERVER['REQUEST_URI'])['path']) {
    case '/submit_job.php':
       require 'submit_job.php';
       break;
+   case '/edit_job.php':
+      require 'edit_job.php';
+      break;
+   case '/logout.php':
+      require 'logout.php';
+      break;
    default:
       http_response_code(404);
       exit('Not Found');

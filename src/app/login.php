@@ -3,8 +3,8 @@ session_start();
 require 'connect-db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['name'];
-    $password = $_POST['pwd'];
+  $username = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
+  $password = htmlspecialchars($_POST['pwd'], ENT_QUOTES, 'UTF-8');
 
     // Retrieve user from database
     $stmt = $db->prepare("SELECT * FROM User WHERE username = ?");
@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Verify password
         if (password_verify($password, $user['password'])) {
             $_SESSION["username"] = $username;
+            $_SESSION["company_id"] = $user['company_id'];
             // Password correct, redirect to home.php
             header("Location: home.php");
             exit();
