@@ -23,12 +23,18 @@ if (isset($_SESSION["username"])) {
 
 $jobs = [];
 $stmt = $db->prepare("
-    SELECT j.job_name, j.work_type, c.name, l.address_city, l.address_state, i.industry_name, s.min_salary, s.max_salary
+    SELECT j.job_name, j.work_type, c.name, l.address_city, l.address_state, i.industry_name, s.min_salary, s.max_salary, p.job_posting_url, d.description, ss.skill_name, b.type
     FROM Job j
     JOIN Company c ON j.company_id = c.company_id
     JOIN Location l ON c.location_id = l.location_id
     JOIN Industry i ON j.industry_id = i.industry_id
     JOIN Salary s ON j.salary_id = s.salary_id
+    JOIN Posting p ON j.job_id = p.job_id
+    JOIN Description d ON j.description_id = d.description_id
+    JOIN Requires r ON j.job_id = r.job_id
+    JOIN Skills ss ON r.skills_id = ss.skills_id
+    JOIN Offers o ON j.job_id = o.job_id
+    JOIN Benefits b ON o.benefits_id = b.benefits_id
     WHERE 
         j.job_name LIKE :search OR
         c.name LIKE :search OR
@@ -37,10 +43,10 @@ $stmt = $db->prepare("
         l.address_state LIKE :search
 ");
 
-$search = '%' . $search_input . '%';
+$search = '%' . strtolower($search_input) . '%';
 $stmt->execute(['search' => $search]);
 $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+$jobs_json = json_encode($jobs);
 ?>
 
 <html>
@@ -56,6 +62,8 @@ $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <link rel="stylesheet" href="/static/styling/maintenance-system.css" /> 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const jobs = <?php echo $jobs_json; ?>;  
+        console.log(jobs);
         var role = '<?php echo $role; ?>';
 
         var jobseekers = document.getElementById('jobseekers');
@@ -68,6 +76,88 @@ $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             employerFields.style.display = 'block';
             jobseekers.style.display = 'none';
         }
+
+        const rows = document.querySelectorAll(".clickable-row");
+
+        rows.forEach((row) => {
+          row.addEventListener("click", function () {
+            const firstCell = this.querySelector("td");
+            const job_title = firstCell ? firstCell.textContent.trim() : "Job Title"; 
+
+            const secondCell = this.querySelectorAll("td")[1];
+            const company_name = secondCell ? secondCell.textContent.trim() : "Company";
+
+            const thirdCell = this.querySelectorAll("td")[2];
+            const industry_name = thirdCell ? thirdCell.textContent.trim() : "Industry";
+
+            const sixthCell = this.querySelectorAll("td")[5];
+            const work_type = sixthCell ? sixthCell.textContent.trim() : "Work Type";
+
+            const posting = getPosting(jobs, job_title, company_name, industry_name, work_type);
+            const description = getDescription(jobs, job_title, company_name, industry_name, work_type);
+            const skills = getSkills(jobs, job_title, company_name, industry_name, work_type);
+            // const benefits = getBenefits(job_title, company_name, industry_name, work_type);
+
+            const modalTitle = document.getElementById("modalLabel");
+            modalTitle.innerHTML = job_title;
+
+            const modalDescription = document.getElementById("description-body");
+            modalDescription.innerHTML = description;
+
+            const modalPosting = document.getElementById("posting-body");
+            modalPosting.innerHTML = posting;
+
+            const modalSkills = document.getElementById("skills-body");
+            modalSkills.innerHTML = skills;
+
+            // const modalBenefits = document.getElementById("benefits-body");
+            // modalBenefits.innerHTML = benefits;
+
+            console.log(row);
+
+            // Show the modal using Bootstrap's modal method
+            const modal = new bootstrap.Modal(document.getElementById("jobModal"));
+            modal.show();  // Open the modal
+          });
+        });
+
+        function findJob(jobs, job_title, company_name, industry_name, work_type) {
+          for (const job in jobs) {
+            if (jobs[job].job_name === job_title &&
+                jobs[job].name === company_name &&
+                jobs[job].work_type === work_type) {
+                      return job;
+            }
+          }
+        }
+
+
+        function getBenefits(jobs, job_title, company_name, industry_name, work_type) {
+          const job = findJob(jobs, job_title, company_name, industry_name, work_type);
+          console.log(jobs[job]);
+          // const benefit = jobs[job]["type"];
+          // return benefit;
+        }
+
+        function getDescription(jobs, job_title, company_name, industry_name, work_type) {
+          const job = findJob(jobs, job_title, company_name, industry_name, work_type);
+          const job_description = jobs[job]["description"];
+          return job_description;
+        }
+
+        function getPosting(jobs, job_title, company_name, industry_name, work_type) {
+          const job = findJob(jobs, job_title, company_name, industry_name, work_type);
+          const job_posting = jobs[job]["job_posting_url"];
+          return job_posting;
+        }
+
+        function getSkills(jobs, job_title, company_name, industry_name, work_type) {
+          const job = findJob(jobs, job_title, company_name, industry_name, work_type);
+          console.log(job);
+          const skill = jobs[job]["skill_name"];
+          return skill;
+        }
+
     });
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -88,31 +178,60 @@ $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </form>
         <table class="table table-hover">
             <thead>
-            <tr style="clickable-row">
+            <tr>
                 <th scope="col">Job Title</th>
                 <th scope="col">Company</th>
                 <th scope="col">Industry</th>
                 <th scope="col">Location</th>
-                <th scope="col">Department</th>
+                <th scope="col">Salary</th>
                 <th scope="col">Employment Type</th>
             </tr>
             </thead>
             <tbody>
-              <!-- PHP code to create table rows dynamically -->
               <?php 
                 for ($i = 1; $i < count($jobs); $i++) {
-                    echo "<tr>";
+                    echo "<tr class='clickable-row'>";
                     echo "<td>" . htmlspecialchars($jobs[$i]['job_name']) . "</td>";
                     echo "<td>" . htmlspecialchars($jobs[$i]['name']) . "</td>";
                     echo "<td>" . htmlspecialchars($jobs[$i]['industry_name']) . "</td>";
                     echo "<td>" . htmlspecialchars($jobs[$i]['address_city']) . ", " . htmlspecialchars($jobs[$i]['address_state']) . "</td>";
-                    echo "<td>" . htmlspecialchars($jobs[$i]['min_salary']) . "-" . htmlspecialchars($jobs[$i]['max_salary']) . "</td>";
+                    $min_salary = $jobs[$i]['min_salary'];
+                    $max_salary = $jobs[$i]['max_salary'];
+                    if ($min_salary > 0 && $max_salary > 0) {
+                        echo "<td>" . htmlspecialchars($min_salary) . " - " . htmlspecialchars($max_salary) . "</td>";
+                    } else {
+                        echo "<td>N/A</td>"; // Default message
+                    }
                     echo "<td>" . htmlspecialchars($jobs[$i]['work_type']) . "</td>";
                     echo "</tr>";
                 }
               ?>
             </tbody>
         </table>
+        <div class="modal fade bd-example-modal-lg" id="jobModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Job Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" id="modal-job-content">
+                <div class="posting" id="posting">Job Posting: </div>
+                <div class="posting-body" id="posting-body"></div><br>
+                <div class="description" id="description">Description: </div>
+                <div class="description-body" id="description-body"></div><br>
+                <div class="skills" id="skills">Skills: </div>
+                <div class="skills-body" id="skills-body"></div><br>
+                <div class="benefits" id="benefits">Benefits: </div>
+                <div class="benefits-body" id="benefits-body"></div><br>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
     </div>
     <div id="employerFields" style="display: none">
         <p>Employer</p>
