@@ -112,69 +112,72 @@ function getOrInsertID($conn, $table, $column, $value, $id_name) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">  
     <link rel="stylesheet" href="/static/styling/maintenance-system.css" /> 
 </head>
+
 <body>
-    <form action="home.php" method="post">
-        <label for="job_name">Job Name:</label><br>
-        <input type="text" id="job_name" name="job_name" required><br>
-        
-        <label for="work_type">Work Type:</label><br>
-        <select id="work_type" name="work_type">
-            <?php
-            foreach ($worktype_options as $type) {
-                echo "<option value='" . htmlspecialchars($type['work_type']) . "'>" . htmlspecialchars($type['work_type']) . "</option>";
-            }
-            ?>
-        </select><br>
+    <div class="container">
+        <form action="home.php" method="post">
+            <label for="job_name">Job Name:</label><br>
+            <input type="text" id="job_name" name="job_name" required><br>
+            
+            <label for="work_type">Work Type:</label><br>
+            <select id="work_type" name="work_type">
+                <?php
+                foreach ($worktype_options as $type) {
+                    echo "<option value='" . htmlspecialchars($type['work_type']) . "'>" . htmlspecialchars($type['work_type']) . "</option>";
+                }
+                ?>
+            </select><br>
 
-        <label for="industry">Industry:</label><br>
-        <select id="industry" name="industry">
-            <?php
-            foreach ($industries as $industry) {
-                echo "<option value='" . htmlspecialchars($industry['industry_name']) . "'>" . htmlspecialchars($industry['industry_name']) . "</option>";
-            }
-            ?>
-        </select><br>
+            <label for="industry">Industry:</label><br>
+            <select id="industry" name="industry">
+                <?php
+                foreach ($industries as $industry) {
+                    echo "<option value='" . htmlspecialchars($industry['industry_name']) . "'>" . htmlspecialchars($industry['industry_name']) . "</option>";
+                }
+                ?>
+            </select><br>
 
-        <label for="description">Description:</label><br>
-        <input type="text" id="description" name="description"><br>
-        
-        <label for="salary">Salary:</label><br>
-        <select id="salary" name="salary">
-            <?php
-            foreach ($salaries as $salary) {
-                $optionText = htmlspecialchars($salary['min_salary']) . '-' . htmlspecialchars($salary['max_salary']) . ' ' . htmlspecialchars($salary['pay_period']) . ' (' . htmlspecialchars($salary['currency']) . ')';
-                echo "<option value='" . htmlspecialchars($salary['salary_id']) . "'>" . $optionText . "</option>";
-            }
-            ?>
-        </select><br>
+            <label for="description">Description:</label><br>
+            <input type="text" id="description" name="description"><br>
+            
+            <label for="salary">Salary:</label><br>
+            <select id="salary" name="salary">
+                <?php
+                foreach ($salaries as $salary) {
+                    $optionText = htmlspecialchars($salary['min_salary']) . '-' . htmlspecialchars($salary['max_salary']) . ' ' . htmlspecialchars($salary['pay_period']) . ' (' . htmlspecialchars($salary['currency']) . ')';
+                    echo "<option value='" . htmlspecialchars($salary['salary_id']) . "'>" . $optionText . "</option>";
+                }
+                ?>
+            </select><br>
 
-        <label for="application_url">Application URL:</label><br>
-        <input type="text" id="application_url" name="application_url"><br>
+            <label for="application_url">Application URL:</label><br>
+            <input type="text" id="application_url" name="application_url"><br>
+            
+            <label for="job_posting_url">Job Posting URL:</label><br>
+            <input type="text" id="job_posting_url" name="job_posting_url"><br>
         
-        <label for="job_posting_url">Job Posting URL:</label><br>
-        <input type="text" id="job_posting_url" name="job_posting_url"><br>
-       
-        <label for="skills">Skills:</label><br>
-        <select id="skillsDropdown">
-            <?php foreach ($skill_options as $skill): ?>
-                <option value="<?php echo $skill['skill_name']; ?>"><?php echo $skill['skill_name']; ?></option>
-            <?php endforeach; ?>
-        </select>
-        <button type="button" onclick="addSkill()">Add Skill</button><br>
-        <ul id="selectedSkills" name=id="selectedSkills"></ul>
+            <label for="skills">Skills:</label><br>
+            <select id="skillsDropdown">
+                <?php foreach ($skill_options as $skill): ?>
+                    <option value="<?php echo $skill['skill_name']; ?>"><?php echo $skill['skill_name']; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <button type="button" onclick="addSkill()">Add Skill</button><br>
+            <ul id="selectedSkills" name="selectedSkills"></ul>
 
-        <label for="benefits">Benefits:</label><br>
-        <select id="benefitsDropdown">
-            <?php foreach ($benefits_options as $benefit): ?>
-                <option value="<?php echo $benefit['type']; ?>"><?php echo $benefit['type']; ?></option>
-            <?php endforeach; ?>
-        </select>
-        <button type="button" onclick="addBenefit()">Add Benefit</button><br>
-        <ul id="selectedBenefits" name="selectedBenefits"></ul>
-        
-        <button type="submit">Submit</button>
-        <button onclick="window.location.href='home.php';">Cancel</button>
-    </form>
+            <label for="benefits">Benefits:</label><br>
+            <select id="benefitsDropdown">
+                <?php foreach ($benefits_options as $benefit): ?>
+                    <option value="<?php echo $benefit['type']; ?>"><?php echo $benefit['type']; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <button type="button" onclick="addBenefit()">Add Benefit</button><br>
+            <ul id="selectedBenefits" name="selectedBenefits"></ul>
+            
+            <button type="submit">Submit</button>
+            <button onclick="window.location.href='home.php';">Cancel</button>
+        </form>
+    </div>
 
     <script>
         // Function to add selected skill to the list
