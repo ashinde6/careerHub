@@ -146,7 +146,6 @@ $employer_jobs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
             </tr>
             </thead>
             <tbody>
-              <!-- PHP code to create table rows dynamically -->
               <?php 
                 for ($i = 1; $i < count($employer_jobs); $i++) {
                     echo "<tr>";
