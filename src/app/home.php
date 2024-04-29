@@ -3,6 +3,7 @@ include('header.php');
 
 require 'connect-db.php'; 
 
+
 $role = "";
 $user = "";
 
@@ -51,12 +52,19 @@ $stmt2 = $db->prepare("
     JOIN Salary s ON j.salary_id = s.salary_id
     WHERE c.company_id = :company_id");
 
-// Bind the company_id parameter
 $stmt2->bindParam(':company_id', $_SESSION["company_id"], PDO::PARAM_INT);
 
 $stmt2->execute();
 $employer_jobs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
+if (isset($_GET['logout'])) {
+  // Destroy the session
+  session_destroy();
+  
+  // Redirect to login page
+  header("Location: login.php");
+  exit();
+}
 ?>
 
 <html>
@@ -79,13 +87,10 @@ $employer_jobs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
         if (role === 'job_seeker') {
             jobseekers.style.display = 'block';
-            employerFields.style.none = 'none';
+            employerFields.style.display = 'none';
         } else {
             employerFields.style.display = 'block';
             jobseekers.style.display = 'none';
-            // redirect to company profile
-            // header("Location: submit_job.php");
-            // exit();
         }
     });
   </script>
@@ -134,7 +139,6 @@ $employer_jobs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
         </table>
     </div>
     <div id="employerFields" style="display: none">
-        <p Welcome, <?php echo htmlspecialchars($name);?>!</p>
         <table class="table table-hover">
             <thead>
             <tr style="clickable-row">
@@ -149,7 +153,7 @@ $employer_jobs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
               <?php 
                 for ($i = 1; $i < count($employer_jobs); $i++) {
                     echo "<tr>";
-                    echo "<td><a href=\"submit_job.php?id=" . urlencode($employer_jobs[$i]['job_id']) . "\">" . htmlspecialchars($employer_jobs[$i]['job_name']) . "</a></td>";
+                    echo "<td><a href=\"submit_job.php?id=" . urlencode($jobs[$i]['job_id']) . "\">" . htmlspecialchars($jobs[$i]['job_name']) . "</a></td>";
                     echo "<td>" . htmlspecialchars($employer_jobs[$i]['name']) . "</td>";
                     echo "<td>" . htmlspecialchars($employer_jobs[$i]['industry_name']) . "</td>";
                     echo "<td>" . htmlspecialchars($employer_jobs[$i]['work_type']) . "</td>";
@@ -163,8 +167,15 @@ $employer_jobs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
             <input type="submit" value="Add Job Listing">
         </form>
     </div>
+    <a href="javascript:void(0);" onclick="logout()">Logout</a>
   </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     
 </body>
+<script>
+    function logout() {
+        // Redirect to logout.php
+        window.location.href = "logout.php";
+    }
+</script>
